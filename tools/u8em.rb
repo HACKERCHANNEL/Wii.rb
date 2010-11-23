@@ -1,4 +1,9 @@
 #!/usr/bin/env ruby
+#	Wii.rb	-- Wii stuff for Ruby
+# 
+# Copyright (C)2010	Alex Marshall "trap15" <trap15@raidenii.net>
+# 
+# All rights reserved, HACKERCHANNEL
 
 $DEBUG = false
 args = ARGV.clone
@@ -18,7 +23,7 @@ unless ARGV.length >= 2
 	exit
 end
 
-require File.dirname(__FILE__) + "/Wii.rb"
+require File.dirname(__FILE__) + "/../Wii.rb"
 
 u8 = U8Archive.new()
 puts "Extracting..."
