@@ -14,13 +14,9 @@ def align(addr, width)
 end
 
 def clamp(val, min, max)
-	if val < min
-		return min
-	elsif val > max
-		return max
-	else
-		return val
-	end
+	return min if val < min
+	return max if val > max
+	return val
 end
 
 class Crypto
