@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-#	Wii.rb	-- Wii stuff for Ruby
+#	Wii.rb -- Wii stuff for Ruby
 # 
 # Copyright (C)2010	Alex Marshall "trap15" <trap15@raidenii.net>
 # 
@@ -26,7 +26,7 @@ end
 class Crypto
 	def initialize()
 		@align = 64
-		@crypter = Cipher.new("AES-256-CBC")
+		@crypter = OpenSSL::Cipher::Cipher.new("AES-256-CBC")
 	end
 	def decryptData(key, iv, data, doalign = true)
 		if ((data.length() % @align) != 0) and doalign
@@ -91,8 +91,8 @@ class WiiObject
 		outf.close
 		return fname;
 	end
-	# def load
-	# def dump
+	# def load(data)
+	# def dump()
 end
 
 class WiiArchive < WiiObject
@@ -106,6 +106,50 @@ class WiiArchive < WiiObject
 		Dir.chdir(old)
 		return ret
 	end
-	# def _dumpDir
-	# def loadDir
+	# def _dumpDir(dirname)
+	# def loadDir(dirname)
+end
+
+class WiiFile < WiiArchive
+	def initialize()
+		@type = nil
+	end
+	def discover()
+		@fcc = @data.unpack("A4")
+		print @fcc[0..3]
+		case @fcc[0..3]
+			when "LZ77"
+				@type = LZ77
+			when "U\xAA8-"
+				@type = U8Archive
+			when "IMD5"
+				@type = IMD5Header
+			when "IMET"
+				@type = IMETHeader
+			else
+				return nil
+		end
+		ret = @type.load(@data)
+		@type.remove()
+		return ret
+	end
+	def load(data)
+		@data = data
+		for i in (0..@data.length())
+			if @data[0] != 0
+				break
+			end
+			@data = @data[1..-1]
+		end
+		return self.discover()
+	end
+	def dump()
+		return @type.dump()
+	end
+	def _dumpDir(dirname)
+		return @type._dumpDir(dirname)
+	end
+	def loadDir(dirname)
+		return @type.loadDir(dirname)
+	end
 end

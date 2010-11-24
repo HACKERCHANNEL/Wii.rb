@@ -1,11 +1,9 @@
 #!/usr/bin/env ruby
-#	Wii.rb	-- Wii stuff for Ruby
+#	Wii.rb -- Wii stuff for Ruby
 # 
 # Copyright (C)2010	Alex Marshall "trap15" <trap15@raidenii.net>
 # 
 # All rights reserved, HACKERCHANNEL
-
-require File.dirname(__FILE__) + "/common.rb"
 
 class U8Header
 	attr_accessor :tag, :rootnode_off, :header_sz, :data_off, :pad
@@ -58,14 +56,14 @@ class U8Archive < WiiArchive
 	def load(data)
 		offset = 0
 		for i in (0..data.length())
-			header = U8Header.new()
-			header.unpack(data[offset,offset + header.length()])
-			if header.tag == "U\xAA8-"
+			if data[offset] != 0
 				break
 			end
 			offset += 1
 		end
 		dataoffset = offset
+		header = U8Header.new()
+		header.unpack(data[offset,offset + header.length()])
 		offset += header.rootnode_off
 		
 		rootnode = U8Node.new()

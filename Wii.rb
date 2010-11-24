@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-#	Wii.rb	-- Wii stuff for Ruby
+#	Wii.rb -- Wii stuff for Ruby
 # 
 # Copyright (C)2010	Alex Marshall "trap15" <trap15@raidenii.net>
 # 
@@ -7,4 +7,6 @@
 
 require File.dirname(__FILE__) + "/common.rb"
 
+require File.dirname(__FILE__) + "/compress.rb"
 require File.dirname(__FILE__) + "/archive.rb"
+require File.dirname(__FILE__) + "/header.rb"
