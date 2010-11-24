@@ -54,17 +54,9 @@ class U8Archive < WiiArchive
 		@files = []
 	end
 	def load(data)
-		offset = 0
-		for i in (0..data.length())
-			if data[offset] != 0
-				break
-			end
-			offset += 1
-		end
-		dataoffset = offset
 		header = U8Header.new()
-		header.unpack(data[offset,offset + header.length()])
-		offset += header.rootnode_off
+		header.unpack(data[0,0 + header.length()])
+		offset = header.rootnode_off
 		
 		rootnode = U8Node.new()
 		rootnode.unpack(data[offset,offset + rootnode.length()])
@@ -96,7 +88,7 @@ class U8Archive < WiiArchive
 					puts "Dir: " + name
 				end
 			elsif node.type == U8Node::TYPE_FILE
-				offset = dataoffset + node.data_off
+				offset = node.data_off
 				@files.push(recursiondir.join('/') + '/' + name.clone)
 				@files.push(data[offset,offset + node.size])
 				

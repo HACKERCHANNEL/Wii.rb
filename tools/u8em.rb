@@ -1,12 +1,11 @@
 #!/usr/bin/env ruby
-#	Wii.rb -- Wii stuff for Ruby
+#	U8em -- A U8 archive extractor using Wii.rb
 # 
 # Copyright (C)2010	Alex Marshall "trap15" <trap15@raidenii.net>
 # 
 # All rights reserved, HACKERCHANNEL
 
 $DEBUG = false
-$COMPRESSED = false
 args = ARGV.clone
 while true
 	arg = args.shift
@@ -14,8 +13,6 @@ while true
 	ARGV.shift
 	if (arg == "--debug") or (arg == "-d")
 		$DEBUG = true
-	elsif (arg == "--compressed") or (arg == "-c")
-		$COMPRESSED = true
 	else
 		ARGV.push(arg)
 	end
@@ -31,12 +28,12 @@ require File.dirname(__FILE__) + "/../Wii.rb"
 u8 = U8Archive.new()
 puts "Extracting..."
 cmp = Compression.new()
-cmp.loadFile(ARGV[0])
-if cmp.compressed?() or $COMPRESSED
-	cmp.uncompress()
-	u8.load(cmp.dump())
-else
-	u8.loadFile(ARGV[0])
-end
+imd5 = IMD5Header.new(readFile(ARGV[0]))
+imd5.remove() if imd5.check?()
+cmp.load(imd5.dump())
+cmp.uncompress() if cmp.compressed?()
+imd5 = IMD5Header.new(cmp.dump)
+imd5.remove() if imd5.check?()
+u8.load(imd5.dump())
 u8.dumpDir(ARGV[1])
 puts "Extracted!"

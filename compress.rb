@@ -26,9 +26,7 @@ class Compression < WiiObject
 		end
 	end
 	def uncompress()
-		if @data[0..3] == "LZ77"
-			@data = @data[4..-1]
-		end
+		@data = @data[4..-1] if @data[0..3] == "LZ77"
 		hdr = @data.unpack("V")[0]
 		uncomp_len = hdr >> 8
 		comp_type = (hdr >> 4) & 0xF
@@ -83,9 +81,7 @@ class Compression < WiiObject
 					srcptr += 1
 				end
 				flags <<= 1
-				if newdata.length() >= uncomp_len
-					break
-				end
+				break if newdata.length() >= uncomp_len
 			end
 			print "\r" + (100 * newdata.length() / uncomp_len).to_s
 		end

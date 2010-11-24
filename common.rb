@@ -8,6 +8,7 @@
 require 'openssl'
 require 'digest/md5'
 require 'digest/sha1'
+require 'iconv'
 
 def align(addr, width)
 	return addr + (width - (addr % width))
@@ -17,6 +18,24 @@ def clamp(val, min, max)
 	return min if val < min
 	return max if val > max
 	return val
+end
+
+def text_conv(outform, inform, intext)
+	return Iconv.iconv(outform, inform, intext).join
+end
+
+def readFile(fname)
+	inf = File.new(fname, "r")
+	ret = inf.read()
+	inf.close
+	return ret
+end
+
+def writeFile(fname, data)
+	inf = File.new(fname, "w+")
+	ret = inf.write(data)
+	inf.close
+	return ret
 end
 
 class Crypto
@@ -76,16 +95,10 @@ end
 
 class WiiObject
 	def loadFile(fname)
-		inf = File.new(fname, "r")
-		ret = self.load(inf.read())
-		inf.close
-		return ret
+		return self.load(readFile(fname))
 	end
 	def dumpFile(fname)
-		outf = File.new(fname, "w+")
-		outf.write(self.dump())
-		outf.close
-		return fname;
+		return writeFile(fname, self.dump())
 	end
 	# def load(data)
 	# def dump()
@@ -93,7 +106,7 @@ end
 
 class WiiArchive < WiiObject
 	def dumpDir(dirname)
-		if not File.directory?(dirname)
+		unless File.directory?(dirname)
 			Dir.mkdir(dirname)
 		end
 		old = Dir.getwd()
