@@ -33,7 +33,7 @@ class ContentMap < WiiObject
 	def dump()
 		data = ""
 		for i in (0...@count)
-			data += [ array[i*2 + 0], array[i*2 + 1] ].pack("A8A20")
+			data += [ array[i*2 + 0], array[i*2 + 1] ].pack("a8a20")
 		end
 		return data
 	end

@@ -93,10 +93,10 @@ class Crypto
 		return self.encryptData(titlekey, iv, data)
 	end
 	def createSHAHash(data)
-		return Digest::SHA1.hexdigest(data)
+		return Digest::SHA1.digest(data)
 	end
 	def createMD5Hash(data)
-		return Digest::MD5.hexdigest(data)
+		return Digest::MD5.digest(data)
 	end
 	def validateSHAHash(data, hash)
 		newhash = self.createSHAHash(data)
@@ -132,9 +132,6 @@ class WiiArchive < WiiObject
 	end
 	# def _dumpDir(dirname)
 	def loadDir(dirname)
-		unless File.directory?(dirname)
-			raise ArgumentError
-		end
 		old = Dir.getwd()
 		Dir.chdir(dirname)
 		ret = self._loadDir(dirname)

@@ -15,7 +15,7 @@ class U8Header
 		@pad = "\0" * 16
 	end
 	def pack()
-		return [ @tag, @rootnode_off, @header_sz, @data_off, @pad ].pack("A4NNNA16")
+		return [ @tag, @rootnode_off, @header_sz, @data_off, @pad ].pack("a4NNNa16")
 	end
 	def unpack(data)
 		array = data.unpack("a4NNNa16")
@@ -56,9 +56,11 @@ class U8Node
 end
 
 class U8Archive < WiiArchive
-	attr_accessor :files
+	attr_accessor :files, :filesizes
 	def initialize()
-		@files = []
+		@filearray = []
+		@files = {}
+		@filesizes = {}
 	end
 	def load(data)
 		header = U8Header.new()
@@ -88,42 +90,52 @@ class U8Archive < WiiArchive
 			if node.type == U8Node::TYPE_FOLDER
 				recursion.push(node.size)
 				recursiondir.push(name.clone)
-				@files.push(recursiondir.join('/'))
-				@files.push(nil) # No data for directories
-				@files.push(0) # No size for directories
+				@files[recursiondir.join('/')] = nil
+				@filesizes[recursiondir.join('/')] = 0
+				@filearray.push(recursiondir.join('/'))
+				@filearray.push(nil) # No data for directories
+				@filearray.push(0) # No size for directories
 				
-				if $DEBUG == true
+				if $DEBUG
 					puts "Dir: " + name
 				end
 			elsif node.type == U8Node::TYPE_FILE
 				offset = node.data_off
-				@files.push(recursiondir.join('/') + '/' + name.clone)
-				@files.push(data[offset..offset + node.size])
-				@files.push(node.size)
+				@files[recursiondir.join('/') + '/' + name.clone] = data[offset..offset + node.size]
+				@filesizes[recursiondir.join('/') + '/' + name.clone] = node.size
+				@filearray.push(recursiondir.join('/') + '/' + name.clone)
+				@filearray.push(data[offset..offset + node.size])
+				@filearray.push(node.size)
 				
-				if $DEBUG == true
+				if $DEBUG
 					puts "File: " + name
 				end
 			else
 				raise TypeError, name + " U8 node type is not file nor folder. Is " + node.type.to_s()
 			end
 			
-			if $DEBUG == true
+			if $DEBUG
 				puts "Data Offset: " + node.data_off.to_s
 				puts "Size: " + node.size.to_s
 				puts "Name Offset: " + node.name_off.to_s
-				puts ""
 			end
-			sz = recursion.pop()
-			if sz != counter + 1
-				recursion.push(sz)
-			else
+			sz = recursion.last
+			while sz == counter + 1
+				if $DEBUG
+					puts "Popped directory " + recursiondir.last
+				end
+				recursion.pop()
 				recursiondir.pop()
+				
+				sz = recursion.last
+			end
+			if $DEBUG
+				puts ""
 			end
 		end
 	end
 	def _dumpDir(dirname)
-		files = @files.clone
+		files = @filearray.clone
 		while true
 			file = files.shift
 			break if !file
@@ -158,21 +170,55 @@ class U8Archive < WiiArchive
 			if $DEBUG
 				puts dir
 			end
-			@files.push(dir)
+			@filearray.push(dir)
 			if File.directory?(dir)
 				if $DEBUG
 					puts "  Dir"
 				end
-				@files.push(nil)
-				@files.push(0)
+				@files[dir] = nil
+				@filesizes[dir] = 0
+				@filearray.push(nil)
+				@filearray.push(0)
 			else
 				if $DEBUG
 					puts "  File"
 				end
-				@files.push(readFile(dir))
-				@files.push(File.size(dir))
+				@files[dir] = readFile(dir)
+				@filesizes[dir] = File.size(dir)
+				@filearray.push(readFile(dir))
+				@filearray.push(File.size(dir))
 			end
 		end
+	end
+	def addFile(filename, target)
+		@files[target] = readFile(filename)
+		@filesizes[target] = File.size(filename)
+		@filearray.push(target)
+		@filearray.push(readFile(filename))
+		@filearray.push(File.size(filename))
+	end
+	def addDirectory(target)
+		@files[target] = nil
+		@filesizes[target] = 0
+		@filearray.push(target)
+		@filearray.push(nil)
+		@filearray.push(0)
+	end
+	def delEntry(target)
+		ctr = 0
+		@files.delete(target)
+		@filesizes.delete(target)
+		@filearray.each {|f|
+			if ctr % 3 == 0
+				if f == target
+					@filearray.delete_at(ctr)
+					@filearray.delete_at(ctr)
+					@filearray.delete_at(ctr)
+					ctr -= 1
+				end
+			end
+			ctr += 1
+		}
 	end
 	def dump()
 		head = U8Header.new()
@@ -183,8 +229,8 @@ class U8Archive < WiiArchive
 		nodes = []
 		strings = "\x00"
 		filedata = ""
-		files = @files.clone
-		files2 = @files.clone
+		files = @filearray.clone
+		files2 = @filearray.clone
 		while true
 			file = files.shift
 			break if !file
@@ -211,7 +257,7 @@ class U8Archive < WiiArchive
 				end
 				node.type = U8Node::TYPE_FOLDER
 				node.data_off = recurse
-				node.size = nodes.length() + 1
+				node.size = nodes.length() + 2
 				if $DEBUG
 					puts "  Position: " + node.size.to_s
 				end
@@ -224,7 +270,7 @@ class U8Archive < WiiArchive
 					end
 					files3.shift
 					files3.shift
-					if file2[0...file.length()] == file
+					if file2[0..file.length()] == (file + "/")
 						if $DEBUG
 							puts "    YES"
 						end
