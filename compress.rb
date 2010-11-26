@@ -1,23 +1,22 @@
 #!/usr/bin/env ruby
-#	Wii.rb -- Wii stuff for Ruby
+#	Wii.rb -- A Wii toolkit written in Ruby
 # 
-# Copyright (C)2010	Alex Marshall "trap15" <trap15@raidenii.net>
-# 
-# All rights reserved, HACKERCHANNEL
+# Author::	Alex Marshall "trap15" (mailto:trap15@raidenii.net)
+# Copyright::	Copyright (C) 2010 HACKERCHANNEL
+# License::	New BSD License
 
+# A class to handle all compression.
 class Compression < WiiObject
 	TYPE_LZ77 = 1
-	def initialize()
-	end
+	# Load the compressor with data.
 	def load(data)
 		@data = data
 	end
+	# Dump out the current data.
 	def dump()
 		return @data
 	end
-	def length()
-		return 8
-	end
+	# Checks if the current data is compressed.
 	def compressed?()
 		if @data[0..3] == "LZ77"
 			return true
@@ -25,6 +24,7 @@ class Compression < WiiObject
 			return false
 		end
 	end
+	# Uncompresses the current data and returns the new data.
 	def uncompress()
 		@data = @data[4..-1] if @data[0..3] == "LZ77"
 		hdr = @data.unpack("V")[0]
@@ -37,6 +37,7 @@ class Compression < WiiObject
 			raise ArgumentError, "Compression type not supported " + comp_type.to_s
 		end
 	end
+	# Compresses the current data and returns the new data.
 	def compress(type)
 		uncomp_len = @data.length()
 		comp_type = type
@@ -51,6 +52,7 @@ class Compression < WiiObject
 	end
 
 # LZ77
+	# Uncompresses the current data using LZ77.
 	def unlz77(uncomp_len)
 		newdata = ""
 		progress = 0
@@ -89,6 +91,7 @@ class Compression < WiiObject
 		@data = newdata
 		return @data
 	end
+	# Compresses the current data using LZ77. (Not available yet)
 	def lz77(newdata)
 		newdata = ""
 		newdata += 'L' + 'Z' + '7' + '7'

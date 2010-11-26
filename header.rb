@@ -1,10 +1,11 @@
 #!/usr/bin/env ruby
-#	Wii.rb -- Wii stuff for Ruby
+#	Wii.rb -- A Wii toolkit written in Ruby
 # 
-# Copyright (C)2010	Alex Marshall "trap15" <trap15@raidenii.net>
-# 
-# All rights reserved, HACKERCHANNEL
+# Author::	Alex Marshall "trap15" (mailto:trap15@raidenii.net)
+# Copyright::	Copyright (C) 2010 HACKERCHANNEL
+# License::	New BSD License
 
+# A class to handle IMD5 headers.
 class IMD5Header < WiiObject
 	def initialize(data)
 		@data = data
@@ -24,8 +25,7 @@ class IMD5Header < WiiObject
 		unless @size == @data[self.length()..-1].length()
 			puts "Invalid length (" + @size.to_s + " vs. " + @data[self.length()..-1].length().to_s + "), continuing anyways..."
 		end
-		newhash = @crypt.createMD5Hash(@data[self.length()..-1])
-		unless @hash == newhash
+		unless @crypt.validateMD5Hash(@data[self.length()..-1], @hash)
 			puts "Invalid hash, continuing anyways..."
 			puts "Hash " + Digest::hexencode(@hash)
 			puts "New  " + Digest::hexencode(newhash)
@@ -51,6 +51,7 @@ class IMD5Header < WiiObject
 	end
 end
 
+# A class to handle IMET headers.
 class IMETHeader < WiiObject
 	attr_accessor :tag, :unk, :sizes, :unk2, :names, :hash
 	def initialize(data)
@@ -94,8 +95,7 @@ class IMETHeader < WiiObject
 		end
 		newdata = @data.clone
 		newdata[@size-0x10,@size] = "\0" * 16
-		newhash = @crypt.createMD5Hash(newdata[0,0+@size])
-		unless @hash == newhash
+		unless @crypt.validateMD5Hash(@data[0, @size], @hash)
 			puts "Invalid hash, continuing anyways..."
 			puts "Hash " + Digest::hexencode(@hash)
 			puts "New  " + Digest::hexencode(newhash)
@@ -125,7 +125,6 @@ class IMETHeader < WiiObject
 		return @data
 	end
 	def length()
-		tag = @data.unpack("a64a4")
 		return @size
 	end
 end

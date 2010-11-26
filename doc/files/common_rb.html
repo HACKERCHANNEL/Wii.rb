@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>File: common.rb</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+  <div id="fileHeader">
+    <h1>common.rb</h1>
+    <table class="header-table">
+    <tr class="top-aligned-row">
+      <td><strong>Path:</strong></td>
+      <td>common.rb
+      </td>
+    </tr>
+    <tr class="top-aligned-row">
+      <td><strong>Last Update:</strong></td>
+      <td>Fri Nov 26 05:36:47 -0800 2010</td>
+    </tr>
+    </table>
+  </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+    <div id="description">
+      <pre>
+      Wii.rb -- A Wii toolkit written in Ruby
+</pre>
+<table>
+<tr><td valign="top">Author:</td><td>Alex Marshall &quot;trap15&quot; (<a
+href="mailto:trap15@raidenii.net">trap15@raidenii.net</a>)
+
+</td></tr>
+<tr><td valign="top">Copyright:</td><td>Copyright (C) 2010 HACKERCHANNEL
+
+</td></tr>
+<tr><td valign="top">License:</td><td>New BSD License
+
+</td></tr>
+</table>
+
+    </div>
+
+    <div id="requires-list">
+      <h3 class="section-bar">Required files</h3>
+
+      <div class="name-list">
+      openssl&nbsp;&nbsp;
+      digest/md5&nbsp;&nbsp;
+      digest/sha1&nbsp;&nbsp;
+      iconv&nbsp;&nbsp;
+      </div>
+    </div>
+
+   </div>
+
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000002">align</a>&nbsp;&nbsp;
+      <a href="#M000003">clamp</a>&nbsp;&nbsp;
+      <a href="#M000005">commonKey</a>&nbsp;&nbsp;
+      <a href="#M000006">koreanKey</a>&nbsp;&nbsp;
+      <a href="#M000001">pad_length</a>&nbsp;&nbsp;
+      <a href="#M000007">readFile</a>&nbsp;&nbsp;
+      <a href="#M000004">text_conv</a>&nbsp;&nbsp;
+      <a href="#M000008">writeFile</a>&nbsp;&nbsp;
+      </div>
+    </div>
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Instance methods</h3>
+
+      <div id="method-M000002" class="method-detail">
+        <a name="M000002"></a>
+
+        <div class="method-heading">
+          <a href="common_rb.src/M000002.html" target="Code" class="method-signature"
+            onclick="popupCode('common_rb.src/M000002.html');return false;">
+          <span class="method-name">align</span><span class="method-args">(addr, width)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Align <tt>addr</tt> to <tt>width</tt> bytes.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000003" class="method-detail">
+        <a name="M000003"></a>
+
+        <div class="method-heading">
+          <a href="common_rb.src/M000003.html" target="Code" class="method-signature"
+            onclick="popupCode('common_rb.src/M000003.html');return false;">
+          <span class="method-name">clamp</span><span class="method-args">(val, min, max)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Clamp <tt>val</tt> to be within <tt>min</tt> and <tt>max</tt>.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000005" class="method-detail">
+        <a name="M000005"></a>
+
+        <div class="method-heading">
+          <a href="common_rb.src/M000005.html" target="Code" class="method-signature"
+            onclick="popupCode('common_rb.src/M000005.html');return false;">
+          <span class="method-name">commonKey</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+The Wii common key.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000006" class="method-detail">
+        <a name="M000006"></a>
+
+        <div class="method-heading">
+          <a href="common_rb.src/M000006.html" target="Code" class="method-signature"
+            onclick="popupCode('common_rb.src/M000006.html');return false;">
+          <span class="method-name">koreanKey</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+The Korean Wii common key.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000001" class="method-detail">
+        <a name="M000001"></a>
+
+        <div class="method-heading">
+          <a href="common_rb.src/M000001.html" target="Code" class="method-signature"
+            onclick="popupCode('common_rb.src/M000001.html');return false;">
+          <span class="method-name">pad_length</span><span class="method-args">(len, width)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Gives the remaining area to pad for <tt>len</tt> to be aligned by
+<tt>width</tt>.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000007" class="method-detail">
+        <a name="M000007"></a>
+
+        <div class="method-heading">
+          <a href="common_rb.src/M000007.html" target="Code" class="method-signature"
+            onclick="popupCode('common_rb.src/M000007.html');return false;">
+          <span class="method-name">readFile</span><span class="method-args">(fname)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Opens a file, reads the contents, then closes the file and returns the
+contents.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000004" class="method-detail">
+        <a name="M000004"></a>
+
+        <div class="method-heading">
+          <a href="common_rb.src/M000004.html" target="Code" class="method-signature"
+            onclick="popupCode('common_rb.src/M000004.html');return false;">
+          <span class="method-name">text_conv</span><span class="method-args">(outform, inform, intext)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Convert <tt>intext</tt> from <tt>inform</tt> text encoding to
+<tt>outform</tt> encoding.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000008" class="method-detail">
+        <a name="M000008"></a>
+
+        <div class="method-heading">
+          <a href="common_rb.src/M000008.html" target="Code" class="method-signature"
+            onclick="popupCode('common_rb.src/M000008.html');return false;">
+          <span class="method-name">writeFile</span><span class="method-args">(fname, data)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Opens a file, writes the contents, then closes the file.
+</p>
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

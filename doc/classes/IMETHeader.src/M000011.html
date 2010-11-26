@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>pack (IMETHeader)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File header.rb, line 83</span>
+        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">pack</span>()
+                <span class="ruby-keyword kw">return</span> [<span class="ruby-value str">&quot;\0&quot;</span> <span class="ruby-operator">*</span> <span class="ruby-value">64</span>, <span class="ruby-ivar">@tag</span>, <span class="ruby-ivar">@size</span>, <span class="ruby-ivar">@unk</span> <span class="ruby-operator">&amp;</span> <span class="ruby-value">0x</span><span class="ruby-constant">FFFFFFFF</span>, <span class="ruby-ivar">@sizes</span>[<span class="ruby-value">0</span>], <span class="ruby-ivar">@sizes</span>[<span class="ruby-value">1</span>], <span class="ruby-ivar">@sizes</span>[<span class="ruby-value">2</span>], 
+                 <span class="ruby-ivar">@unk2</span>, <span class="ruby-ivar">@names</span>[<span class="ruby-value">0</span>], <span class="ruby-ivar">@names</span>[<span class="ruby-value">1</span>], <span class="ruby-ivar">@names</span>[<span class="ruby-value">2</span>], <span class="ruby-ivar">@names</span>[<span class="ruby-value">3</span>], <span class="ruby-ivar">@names</span>[<span class="ruby-value">4</span>], <span class="ruby-ivar">@names</span>[<span class="ruby-value">5</span>], <span class="ruby-ivar">@names</span>[<span class="ruby-value">6</span>],
+                 <span class="ruby-ivar">@names</span>[<span class="ruby-value">7</span>], <span class="ruby-ivar">@names</span>[<span class="ruby-value">8</span>], <span class="ruby-ivar">@names</span>[<span class="ruby-value">9</span>], <span class="ruby-value str">&quot;\0&quot;</span> <span class="ruby-operator">*</span> <span class="ruby-value">588</span>, <span class="ruby-ivar">@hash</span>].<span class="ruby-identifier">pack</span>(<span class="ruby-value str">&quot;a64a4NN&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;N&quot;</span><span class="ruby-operator">*</span><span class="ruby-value">3</span> <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;N&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;a84&quot;</span><span class="ruby-operator">*</span><span class="ruby-value">10</span> <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;a588a16&quot;</span>)
+        <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

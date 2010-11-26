@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>add (IMETHeader)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File header.rb, line 105</span>
+        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add</span>(<span class="ruby-identifier">sizes</span>, <span class="ruby-identifier">names</span>)
+                <span class="ruby-ivar">@tag</span> = <span class="ruby-value str">&quot;IMET&quot;</span>
+                <span class="ruby-ivar">@size</span> = <span class="ruby-value">0x00000600</span>
+                <span class="ruby-ivar">@unk</span> = <span class="ruby-value">00000003</span>
+                <span class="ruby-ivar">@sizes</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">2</span>] = <span class="ruby-identifier">sizes</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">2</span>]
+                <span class="ruby-ivar">@unk2</span> = <span class="ruby-value">0</span>
+                <span class="ruby-keyword kw">for</span> <span class="ruby-identifier">i</span> <span class="ruby-keyword kw">in</span> (<span class="ruby-value">0</span><span class="ruby-operator">...</span><span class="ruby-value">10</span>)
+                        <span class="ruby-ivar">@names</span>[<span class="ruby-identifier">i</span>] = <span class="ruby-identifier">text_conv</span>(<span class="ruby-value str">&quot;UTF-16BE&quot;</span>, <span class="ruby-value str">&quot;UTF-8&quot;</span>, <span class="ruby-identifier">names</span>[<span class="ruby-identifier">i</span>]) <span class="ruby-comment cmt"># Multi-language names</span>
+                <span class="ruby-keyword kw">end</span>
+                <span class="ruby-ivar">@hash</span> = <span class="ruby-value str">&quot;\0&quot;</span> <span class="ruby-operator">*</span> <span class="ruby-value">16</span>
+                <span class="ruby-identifier">imet</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">pack</span>()
+                <span class="ruby-ivar">@hash</span> = <span class="ruby-ivar">@crypt</span>.<span class="ruby-identifier">createMD5Hash</span>(<span class="ruby-identifier">imet</span>[<span class="ruby-value">0</span>,<span class="ruby-ivar">@size</span>])
+                <span class="ruby-ivar">@data</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">pack</span>() <span class="ruby-operator">+</span> <span class="ruby-ivar">@data</span>
+                <span class="ruby-keyword kw">return</span> <span class="ruby-ivar">@data</span>
+        <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

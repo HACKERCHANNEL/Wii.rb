@@ -1,9 +1,9 @@
 #!/usr/bin/env ruby
-#	Wii.rb -- Wii stuff for Ruby
+#	Wii.rb -- A Wii toolkit written in Ruby
 # 
-# Copyright (C)2010	Alex Marshall "trap15" <trap15@raidenii.net>
-# 
-# All rights reserved, HACKERCHANNEL
+# Author::	Alex Marshall "trap15" (mailto:trap15@raidenii.net)
+# Copyright::	Copyright (C) 2010 HACKERCHANNEL
+# License::	New BSD License
 
 require File.dirname(__FILE__) + "/common.rb"
 

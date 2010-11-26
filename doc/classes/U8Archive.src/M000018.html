@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>load (U8Archive)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File archive.rb, line 72</span>
+        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">load</span>(<span class="ruby-identifier">data</span>)
+                <span class="ruby-identifier">header</span> = <span class="ruby-constant">U8Header</span>.<span class="ruby-identifier">new</span>()
+                <span class="ruby-identifier">header</span>.<span class="ruby-identifier">unpack</span>(<span class="ruby-identifier">data</span>[<span class="ruby-value">0</span>,<span class="ruby-value">0</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">header</span>.<span class="ruby-identifier">length</span>()])
+                <span class="ruby-identifier">offset</span> = <span class="ruby-identifier">header</span>.<span class="ruby-identifier">rootnode_off</span>
+                
+                <span class="ruby-identifier">rootnode</span> = <span class="ruby-constant">U8Node</span>.<span class="ruby-identifier">new</span>()
+                <span class="ruby-identifier">rootnode</span>.<span class="ruby-identifier">unpack</span>(<span class="ruby-identifier">data</span>[<span class="ruby-identifier">offset</span>,<span class="ruby-identifier">offset</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">rootnode</span>.<span class="ruby-identifier">length</span>()])
+                <span class="ruby-identifier">offset</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">rootnode</span>.<span class="ruby-identifier">length</span>()
+                
+                <span class="ruby-identifier">nodes</span> = []
+                <span class="ruby-keyword kw">for</span> <span class="ruby-identifier">i</span> <span class="ruby-keyword kw">in</span> (<span class="ruby-value">0</span><span class="ruby-operator">...</span><span class="ruby-identifier">rootnode</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>)
+                        <span class="ruby-identifier">node</span> = <span class="ruby-constant">U8Node</span>.<span class="ruby-identifier">new</span>()
+                        <span class="ruby-identifier">node</span>.<span class="ruby-identifier">unpack</span>(<span class="ruby-identifier">data</span>[<span class="ruby-identifier">offset</span>,<span class="ruby-identifier">offset</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">node</span>.<span class="ruby-identifier">length</span>()])
+                        <span class="ruby-identifier">offset</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">node</span>.<span class="ruby-identifier">length</span>()
+                        <span class="ruby-identifier">nodes</span>.<span class="ruby-identifier">push</span>(<span class="ruby-identifier">node</span>)
+                <span class="ruby-keyword kw">end</span>
+                <span class="ruby-identifier">strings</span> = <span class="ruby-identifier">data</span>[<span class="ruby-identifier">offset</span>,<span class="ruby-identifier">offset</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">header</span>.<span class="ruby-identifier">data_off</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">header</span>.<span class="ruby-identifier">length</span>() <span class="ruby-operator">-</span> (<span class="ruby-identifier">rootnode</span>.<span class="ruby-identifier">length</span>() <span class="ruby-operator">*</span> <span class="ruby-identifier">rootnode</span>.<span class="ruby-identifier">size</span>)]
+                <span class="ruby-identifier">offset</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">strings</span>.<span class="ruby-identifier">length</span>()
+                
+                <span class="ruby-identifier">recursion</span> = [<span class="ruby-identifier">rootnode</span>.<span class="ruby-identifier">size</span>]
+                <span class="ruby-identifier">recursiondir</span> = [<span class="ruby-value str">&quot;.&quot;</span>]
+                <span class="ruby-identifier">counter</span> = <span class="ruby-value">0</span>
+                <span class="ruby-keyword kw">for</span> <span class="ruby-identifier">node</span> <span class="ruby-keyword kw">in</span> <span class="ruby-identifier">nodes</span>
+                        <span class="ruby-identifier">counter</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
+                        <span class="ruby-identifier">name</span> = (<span class="ruby-identifier">strings</span>[<span class="ruby-identifier">node</span>.<span class="ruby-identifier">name_off</span>,<span class="ruby-identifier">strings</span>.<span class="ruby-identifier">length</span>()].<span class="ruby-identifier">split</span>(<span class="ruby-regexp re">/\x00/</span>))[<span class="ruby-value">0</span>]
+                        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">node</span>.<span class="ruby-identifier">type</span> <span class="ruby-operator">==</span> <span class="ruby-constant">U8Node</span><span class="ruby-operator">::</span><span class="ruby-constant">TYPE_FOLDER</span>
+                                <span class="ruby-identifier">recursion</span>.<span class="ruby-identifier">push</span>(<span class="ruby-identifier">node</span>.<span class="ruby-identifier">size</span>)
+                                <span class="ruby-identifier">recursiondir</span>.<span class="ruby-identifier">push</span>(<span class="ruby-identifier">name</span>.<span class="ruby-identifier">clone</span>)
+                                <span class="ruby-ivar">@files</span>[<span class="ruby-identifier">recursiondir</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">'/'</span>)] = <span class="ruby-keyword kw">nil</span>
+                                <span class="ruby-ivar">@filesizes</span>[<span class="ruby-identifier">recursiondir</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">'/'</span>)] = <span class="ruby-value">0</span>
+                                <span class="ruby-ivar">@filearray</span>.<span class="ruby-identifier">push</span>(<span class="ruby-identifier">recursiondir</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">'/'</span>))
+                                <span class="ruby-ivar">@filearray</span>.<span class="ruby-identifier">push</span>(<span class="ruby-keyword kw">nil</span>) <span class="ruby-comment cmt"># No data for directories</span>
+                                <span class="ruby-ivar">@filearray</span>.<span class="ruby-identifier">push</span>(<span class="ruby-value">0</span>) <span class="ruby-comment cmt"># No size for directories</span>
+                                
+                                <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">$DEBUG</span>
+                                        <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Dir: &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">name</span>
+                                <span class="ruby-keyword kw">end</span>
+                        <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">node</span>.<span class="ruby-identifier">type</span> <span class="ruby-operator">==</span> <span class="ruby-constant">U8Node</span><span class="ruby-operator">::</span><span class="ruby-constant">TYPE_FILE</span>
+                                <span class="ruby-identifier">offset</span> = <span class="ruby-identifier">node</span>.<span class="ruby-identifier">data_off</span>
+                                <span class="ruby-ivar">@files</span>[<span class="ruby-identifier">recursiondir</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">'/'</span>) <span class="ruby-operator">+</span> <span class="ruby-value str">'/'</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">name</span>.<span class="ruby-identifier">clone</span>] = <span class="ruby-identifier">data</span>[<span class="ruby-identifier">offset</span><span class="ruby-operator">..</span><span class="ruby-identifier">offset</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">node</span>.<span class="ruby-identifier">size</span>]
+                                <span class="ruby-ivar">@filesizes</span>[<span class="ruby-identifier">recursiondir</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">'/'</span>) <span class="ruby-operator">+</span> <span class="ruby-value str">'/'</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">name</span>.<span class="ruby-identifier">clone</span>] = <span class="ruby-identifier">node</span>.<span class="ruby-identifier">size</span>
+                                <span class="ruby-ivar">@filearray</span>.<span class="ruby-identifier">push</span>(<span class="ruby-identifier">recursiondir</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">'/'</span>) <span class="ruby-operator">+</span> <span class="ruby-value str">'/'</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">name</span>.<span class="ruby-identifier">clone</span>)
+                                <span class="ruby-ivar">@filearray</span>.<span class="ruby-identifier">push</span>(<span class="ruby-identifier">data</span>[<span class="ruby-identifier">offset</span><span class="ruby-operator">..</span><span class="ruby-identifier">offset</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">node</span>.<span class="ruby-identifier">size</span>])
+                                <span class="ruby-ivar">@filearray</span>.<span class="ruby-identifier">push</span>(<span class="ruby-identifier">node</span>.<span class="ruby-identifier">size</span>)
+                                
+                                <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">$DEBUG</span>
+                                        <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;File: &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">name</span>
+                                <span class="ruby-keyword kw">end</span>
+                        <span class="ruby-keyword kw">else</span>
+                                <span class="ruby-identifier">raise</span> <span class="ruby-constant">TypeError</span>, <span class="ruby-identifier">name</span> <span class="ruby-operator">+</span> <span class="ruby-value str">&quot; U8 node type is not file nor folder. Is &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">node</span>.<span class="ruby-identifier">type</span>.<span class="ruby-identifier">to_s</span>()
+                        <span class="ruby-keyword kw">end</span>
+                        
+                        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">$DEBUG</span>
+                                <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Data Offset: &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">node</span>.<span class="ruby-identifier">data_off</span>.<span class="ruby-identifier">to_s</span>
+                                <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Size: &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">node</span>.<span class="ruby-identifier">size</span>.<span class="ruby-identifier">to_s</span>
+                                <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Name Offset: &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">node</span>.<span class="ruby-identifier">name_off</span>.<span class="ruby-identifier">to_s</span>
+                        <span class="ruby-keyword kw">end</span>
+                        <span class="ruby-identifier">sz</span> = <span class="ruby-identifier">recursion</span>.<span class="ruby-identifier">last</span>
+                        <span class="ruby-keyword kw">while</span> <span class="ruby-identifier">sz</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">counter</span> <span class="ruby-operator">+</span> <span class="ruby-value">1</span>
+                                <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">$DEBUG</span>
+                                        <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Popped directory &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">recursiondir</span>.<span class="ruby-identifier">last</span>
+                                <span class="ruby-keyword kw">end</span>
+                                <span class="ruby-identifier">recursion</span>.<span class="ruby-identifier">pop</span>()
+                                <span class="ruby-identifier">recursiondir</span>.<span class="ruby-identifier">pop</span>()
+                                
+                                <span class="ruby-identifier">sz</span> = <span class="ruby-identifier">recursion</span>.<span class="ruby-identifier">last</span>
+                        <span class="ruby-keyword kw">end</span>
+                        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">$DEBUG</span>
+                                <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;&quot;</span>
+                        <span class="ruby-keyword kw">end</span>
+                <span class="ruby-keyword kw">end</span>
+        <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

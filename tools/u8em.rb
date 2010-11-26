@@ -1,9 +1,9 @@
 #!/usr/bin/env ruby
 #	U8em -- A U8 archive extractor using Wii.rb
 # 
-# Copyright (C)2010	Alex Marshall "trap15" <trap15@raidenii.net>
-# 
-# All rights reserved, HACKERCHANNEL
+# Author::	Alex Marshall "trap15" (mailto:trap15@raidenii.net)
+# Copyright::	Copyright (C) 2010 HACKERCHANNEL
+# License::	New BSD License
 
 $DEBUG = false
 args = ARGV.clone

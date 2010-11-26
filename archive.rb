@@ -1,10 +1,11 @@
 #!/usr/bin/env ruby
-#	Wii.rb -- Wii stuff for Ruby
+#	Wii.rb -- A Wii toolkit written in Ruby
 # 
-# Copyright (C)2010	Alex Marshall "trap15" <trap15@raidenii.net>
-# 
-# All rights reserved, HACKERCHANNEL
+# Author::	Alex Marshall "trap15" (mailto:trap15@raidenii.net)
+# Copyright::	Copyright (C) 2010 HACKERCHANNEL
+# License::	New BSD License
 
+# The header for a U8 archive.
 class U8Header
 	attr_accessor :tag, :rootnode_off, :header_sz, :data_off, :pad
 	def initialize()
@@ -30,6 +31,7 @@ class U8Header
 	end
 end
 
+# A U8 archive node.
 class U8Node
 	TYPE_FILE	= 0x0000
 	TYPE_FOLDER	= 0x0100
@@ -55,13 +57,18 @@ class U8Node
 	end
 end
 
+# This class wraps the U8 format.
 class U8Archive < WiiArchive
-	attr_accessor :files, :filesizes
+	# A hash indexed by filename, that contains file data.
+	attr_accessor :files
+	# A hash indexed by filename, that contains file sizes.
+	attr_accessor :filesizes
 	def initialize()
 		@filearray = []
 		@files = {}
 		@filesizes = {}
 	end
+	# Loads internal structures with the data from a pre-existing U8 file.
 	def load(data)
 		header = U8Header.new()
 		header.unpack(data[0,0 + header.length()])
@@ -134,6 +141,8 @@ class U8Archive < WiiArchive
 			end
 		end
 	end
+	# Dumps out the internal structure into regular files on the host.
+	# Exposed as +dumpDir+.
 	def _dumpDir(dirname)
 		files = @filearray.clone
 		while true
@@ -161,6 +170,8 @@ class U8Archive < WiiArchive
 			end
 		end
 	end
+	# Loads regular files from a directory on the host into the internal
+	# structure. Exposed as +loadDir+.
 	def _loadDir(dirname)
 		dirs = File.join("**", "*")
 		dirlist = Dir.glob(dirs)
@@ -190,6 +201,7 @@ class U8Archive < WiiArchive
 			end
 		end
 	end
+	# Adds +filename+ to the internal structure, naming it +target+.
 	def addFile(filename, target)
 		@files[target] = readFile(filename)
 		@filesizes[target] = File.size(filename)
@@ -197,6 +209,7 @@ class U8Archive < WiiArchive
 		@filearray.push(readFile(filename))
 		@filearray.push(File.size(filename))
 	end
+	# Creates a directory named +target+ in the internal structure.
 	def addDirectory(target)
 		@files[target] = nil
 		@filesizes[target] = 0
@@ -204,6 +217,7 @@ class U8Archive < WiiArchive
 		@filearray.push(nil)
 		@filearray.push(0)
 	end
+	# Deletes an entry from the internal structure.
 	def delEntry(target)
 		ctr = 0
 		@files.delete(target)
@@ -220,6 +234,7 @@ class U8Archive < WiiArchive
 			ctr += 1
 		}
 	end
+	# Dumps out the internal structure into a U8 archive.
 	def dump()
 		head = U8Header.new()
 		rootnode = U8Node.new()
