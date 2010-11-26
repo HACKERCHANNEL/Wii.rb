@@ -10,8 +10,15 @@ require 'digest/md5'
 require 'digest/sha1'
 require 'iconv'
 
+def pad_length(len, width)
+	if len % width == 0
+		return 0
+	end
+	return (width - (len % width))
+end
+
 def align(addr, width)
-	return addr + (width - (addr % width))
+	return addr + pad_length(addr, width)
 end
 
 def clamp(val, min, max)
@@ -22,6 +29,14 @@ end
 
 def text_conv(outform, inform, intext)
 	return Iconv.iconv(outform, inform, intext).join
+end
+
+def commonKey()
+	return "\xEB\xE4\x2A\x22\x5E\x85\x93\xE4\x48\xD9\xC5\x45\x73\x81\xAA\xF7"
+end
+
+def koreanKey() # Kekekekeke
+	return "\x63\xB8\x2B\xB4\xF4\x61\x4E\x2E\x13\xF2\xFE\xFB\xBA\x4C\x9B\x7E"
 end
 
 def readFile(fname)
@@ -116,5 +131,15 @@ class WiiArchive < WiiObject
 		return ret
 	end
 	# def _dumpDir(dirname)
-	# def loadDir(dirname)
+	def loadDir(dirname)
+		unless File.directory?(dirname)
+			raise ArgumentError
+		end
+		old = Dir.getwd()
+		Dir.chdir(dirname)
+		ret = self._loadDir(dirname)
+		Dir.chdir(old)
+		return ret
+	end
+	# def _loadDir(dirname)
 end

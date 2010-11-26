@@ -47,13 +47,13 @@ puts "	Dutch: " + imet.names[6]
 puts "	Simple Chinese: " + imet.names[7]
 puts "	Traditional Chinese: " + imet.names[8]
 puts "	Korean: " + imet.names[9]
-puts "	Unk3: " + imet.names[10]
-puts "	Unk4: " + imet.names[11]
-puts "	Unk5: " + imet.names[12]
-puts "	Unk6: " + imet.names[13]
-puts "	Unk7: " + imet.names[14]
-puts "	Unk8: " + imet.names[15]
-puts "	Unk9: " + imet.names[16]
+puts "	Unk1: " + imet.names[10]
+puts "	Unk2: " + imet.names[11]
+puts "	Unk3: " + imet.names[12]
+puts "	Unk4: " + imet.names[13]
+puts "	Unk5: " + imet.names[14]
+puts "	Unk6: " + imet.names[15]
+puts "	Unk7: " + imet.names[16]
 cmp.load(imet.remove())
 if cmp.compressed?() or $COMPRESSED
 	cmp.uncompress()
@@ -62,6 +62,7 @@ u8.load(cmp.dump())
 u8.dumpDir(ARGV[1])
 
 puts "Extracting banner.bin"
+u8 = U8Archive.new()
 imd5 = IMD5Header.new(readFile(ARGV[1] + "/meta/banner.bin"))
 imd5.remove() if imd5.check?()
 cmp.load(imd5.dump())
@@ -73,6 +74,7 @@ u8.dumpDir(ARGV[1] + "/meta/banner")
 puts "Extracted banner.bin!"
 
 puts "Extracting icon.bin"
+u8 = U8Archive.new()
 cmp.loadFile(ARGV[1] + "/meta/icon.bin")
 imd5.remove() if imd5.check?()
 cmp.load(imd5.dump())

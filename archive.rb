@@ -8,7 +8,7 @@
 class U8Header
 	attr_accessor :tag, :rootnode_off, :header_sz, :data_off, :pad
 	def initialize()
-		@tag = " " * 4
+		@tag = ""
 		@rootnode_off = 0
 		@header_sz = 0
 		@data_off = 0
@@ -34,6 +34,12 @@ class U8Node
 	TYPE_FILE	= 0x0000
 	TYPE_FOLDER	= 0x0100
 	attr_accessor :type, :name_off, :data_off, :size
+	def initialize()
+		@type = 0
+		@name_off = 0
+		@data_off = 0
+		@size = 0
+	end
 	def pack()
 		return [ @type, @name_off, @data_off, @size ].pack("nnNN")
 	end
@@ -50,6 +56,7 @@ class U8Node
 end
 
 class U8Archive < WiiArchive
+	attr_accessor :files
 	def initialize()
 		@files = []
 	end
@@ -83,6 +90,7 @@ class U8Archive < WiiArchive
 				recursiondir.push(name.clone)
 				@files.push(recursiondir.join('/'))
 				@files.push(nil) # No data for directories
+				@files.push(0) # No size for directories
 				
 				if $DEBUG == true
 					puts "Dir: " + name
@@ -90,7 +98,8 @@ class U8Archive < WiiArchive
 			elsif node.type == U8Node::TYPE_FILE
 				offset = node.data_off
 				@files.push(recursiondir.join('/') + '/' + name.clone)
-				@files.push(data[offset,offset + node.size])
+				@files.push(data[offset..offset + node.size])
+				@files.push(node.size)
 				
 				if $DEBUG == true
 					puts "File: " + name
@@ -114,10 +123,12 @@ class U8Archive < WiiArchive
 		end
 	end
 	def _dumpDir(dirname)
+		files = @files.clone
 		while true
-			file = @files.shift
-			data = @files.shift
+			file = files.shift
 			break if !file
+			data = files.shift
+			size = files.shift
 			if $DEBUG == true
 				puts file
 			end
@@ -133,9 +144,131 @@ class U8Archive < WiiArchive
 					puts "File"
 				end
 				outf = File.new(file, "w+")
-				outf.write(data)
+				outf.write(data[0,size])
 				outf.close
 			end
 		end
+	end
+	def _loadDir(dirname)
+		dirs = File.join("**", "*")
+		dirlist = Dir.glob(dirs)
+		while true
+			dir = dirlist.shift
+			break if !dir
+			if $DEBUG
+				puts dir
+			end
+			@files.push(dir)
+			if File.directory?(dir)
+				if $DEBUG
+					puts "  Dir"
+				end
+				@files.push(nil)
+				@files.push(0)
+			else
+				if $DEBUG
+					puts "  File"
+				end
+				@files.push(readFile(dir))
+				@files.push(File.size(dir))
+			end
+		end
+	end
+	def dump()
+		head = U8Header.new()
+		rootnode = U8Node.new()
+		head.tag = "U\xAA8-"
+		head.rootnode_off = 0x20
+		rootnode.type = U8Node::TYPE_FOLDER
+		nodes = []
+		strings = "\x00"
+		filedata = ""
+		files = @files.clone
+		files2 = @files.clone
+		while true
+			file = files.shift
+			break if !file
+			data = files.shift
+			size = files.shift
+			if $DEBUG
+				puts file
+			end
+			node = U8Node.new()
+			recurse = file.count "/"
+			if file.rindex("/") == nil
+				name = file.clone
+			else
+				name = file[file.rindex("/") + 1..-1]
+			end
+			node.name_off = strings.length()
+			if $DEBUG
+				puts name
+			end
+			strings += name + "\x00"
+			if data == nil # Directory
+				if $DEBUG
+					puts "Directory"
+				end
+				node.type = U8Node::TYPE_FOLDER
+				node.data_off = recurse
+				node.size = nodes.length() + 1
+				if $DEBUG
+					puts "  Position: " + node.size.to_s
+				end
+				files3 = files2.clone
+				while true
+					file2 = files3.shift
+					break if !file2
+					if $DEBUG
+						puts "  " + file2
+					end
+					files3.shift
+					files3.shift
+					if file2[0...file.length()] == file
+						if $DEBUG
+							puts "    YES"
+						end
+						node.size += 1
+					end
+				end
+				if $DEBUG
+					puts "  Size: " + node.size.to_s
+				end
+			else # File
+				if $DEBUG
+					puts "File"
+				end
+				node.type = U8Node::TYPE_FILE
+				node.data_off = filedata.length()
+				# 32 bytes seems to work best for "fuzzyness". ???
+				node.size = size
+				filedata += data + ("\x00" * pad_length(node.size, 32))
+				if $DEBUG
+					puts "  Size: " + node.size.to_s
+				end
+			end
+			if $DEBUG
+				puts ""
+			end
+			nodes.push(node)
+		end
+		head.header_sz = ((nodes.length() + 1) * rootnode.length()) + strings.length()
+		head.data_off = align(head.header_sz + head.rootnode_off, 64)
+		rootnode.size = nodes.length() + 1
+		
+		for i in (0...nodes.length())
+			if nodes[i].type == U8Node::TYPE_FILE
+				nodes[i].data_off += head.data_off
+			end
+		end
+		dat = ""
+		dat += head.pack()
+		dat += rootnode.pack()
+		nodes.map {|node| dat += node.pack() }
+		dat += strings
+		dat += "\x00" * (head.data_off - head.rootnode_off - head.header_sz)
+		dat += filedata
+		
+		return dat
 	end
 end

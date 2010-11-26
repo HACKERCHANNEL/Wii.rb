@@ -5,7 +5,7 @@
 # 
 # All rights reserved, HACKERCHANNEL
 
-class IMD5Header
+class IMD5Header < WiiObject
 	def initialize(data)
 		@data = data
 		@crypt = Crypto.new()
@@ -49,7 +49,7 @@ class IMD5Header
 	end
 end
 
-class IMETHeader
+class IMETHeader < WiiObject
 	attr_accessor :tag, :unk, :sizes, :unk2, :names, :hash
 	def initialize(data)
 		@data = data
@@ -58,7 +58,10 @@ class IMETHeader
 		@names = []
 	end
 	def check?()
-		tag = @data.unpack("a64a4")
+		tag = @data.unpack("a64a4a60a4")
+		unless (tag[1] == "IMET") or (tag[3] == "IMET")
+			return false
+		end
 		if tag[1] == "IMET"
 			imet = @data.unpack("a64a4NN" + "N"*3 + "N" + "a84"*17 + "a16")
 		else
