@@ -5,6 +5,16 @@
 # Copyright::	Copyright (C) 2010 HACKERCHANNEL
 # License::	New BSD License
 
+def usage()
+	puts "Usage:"
+	puts "	" + $0 + " infolder out.bnr \"title\" [--channel]"
+end
+
+puts "PXbanner -- A banner packer using Wii.rb"
+puts "Copyright (C) 2010 HACKERCHANNEL"
+puts "Written by Alex Marshall \"trap15\" <trap15@raidenii.net>"
+puts ""
+
 $DEBUG = false
 $DISC = true
 args = ARGV.clone

@@ -5,6 +5,16 @@
 # Copyright::	Copyright (C) 2010 HACKERCHANNEL
 # License::	New BSD License
 
+def usage()
+	puts "Usage:"
+	puts "	" + $0 + " infolder output.arc"
+end
+
+puts "U8pack -- A U8 archive packer using Wii.rb"
+puts "Copyright (C) 2010 HACKERCHANNEL"
+puts "Written by Alex Marshall \"trap15\" <trap15@raidenii.net>"
+puts ""
+
 $DEBUG = false
 args = ARGV.clone
 while true
@@ -13,13 +23,17 @@ while true
 	ARGV.shift
 	if (arg == "--debug") or (arg == "-d")
 		$DEBUG = true
+	elsif (arg == "--help") or (arg == "-h")
+		usage()
+		exit
 	else
 		ARGV.push(arg)
 	end
 end
 
 unless ARGV.length >= 2
-	puts "Invalid arguments."
+	print "Invalid arguments."
+	usage()
 	exit
 end
 
