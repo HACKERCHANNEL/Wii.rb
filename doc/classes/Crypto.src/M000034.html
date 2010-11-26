@@ -5,15 +5,15 @@
 
 <html>
 <head>
-  <title>new (Crypto)</title>
+  <title>decryptTitleKey (Crypto)</title>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
   <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
 </head>
 <body class="standalone-code">
-  <pre><span class="ruby-comment cmt"># File common.rb, line 66</span>
-        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>()
-                <span class="ruby-ivar">@align</span> = <span class="ruby-value">64</span>
-                <span class="ruby-ivar">@crypter</span> = <span class="ruby-constant">OpenSSL</span><span class="ruby-operator">::</span><span class="ruby-constant">Cipher</span><span class="ruby-operator">::</span><span class="ruby-constant">Cipher</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value str">&quot;AES-256-CBC&quot;</span>)
+  <pre><span class="ruby-comment cmt"># File common.rb, line 100</span>
+        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">decryptTitleKey</span>(<span class="ruby-identifier">commonkey</span>, <span class="ruby-identifier">tid</span>, <span class="ruby-identifier">enckey</span>)
+                <span class="ruby-identifier">iv</span> = [ (<span class="ruby-identifier">tid</span> <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-value">32</span>) <span class="ruby-operator">&amp;</span> <span class="ruby-value">0x</span><span class="ruby-constant">FFFFFFFF</span> ].<span class="ruby-identifier">pack</span>(<span class="ruby-value str">&quot;N&quot;</span>) <span class="ruby-operator">+</span> [ <span class="ruby-identifier">tid</span> <span class="ruby-operator">&amp;</span> <span class="ruby-value">0x</span><span class="ruby-constant">FFFFFFFF</span> ].<span class="ruby-identifier">pack</span>(<span class="ruby-value str">&quot;N&quot;</span>) <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;\x00&quot;</span> <span class="ruby-operator">*</span> <span class="ruby-value">8</span>
+                <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">decryptData</span>(<span class="ruby-identifier">commonkey</span>, <span class="ruby-identifier">iv</span>, <span class="ruby-identifier">enckey</span>)
         <span class="ruby-keyword kw">end</span></pre>
 </body>
 </html>

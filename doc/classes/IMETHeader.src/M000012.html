@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
 </head>
 <body class="standalone-code">
-  <pre><span class="ruby-comment cmt"># File header.rb, line 88</span>
+  <pre><span class="ruby-comment cmt"># File header.rb, line 98</span>
         <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">check?</span>()
                 <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">false</span> <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">unpack</span>()
                 <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@unk</span> <span class="ruby-operator">==</span> <span class="ruby-value">3</span>
@@ -23,8 +23,6 @@
                 <span class="ruby-identifier">newdata</span>[<span class="ruby-ivar">@size</span><span class="ruby-operator">-</span><span class="ruby-value">0x10</span>,<span class="ruby-ivar">@size</span>] = <span class="ruby-value str">&quot;\0&quot;</span> <span class="ruby-operator">*</span> <span class="ruby-value">16</span>
                 <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@crypt</span>.<span class="ruby-identifier">validateMD5Hash</span>(<span class="ruby-ivar">@data</span>[<span class="ruby-value">0</span>, <span class="ruby-ivar">@size</span>], <span class="ruby-ivar">@hash</span>)
                         <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Invalid hash, continuing anyways...&quot;</span>
-                        <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Hash &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-constant">Digest</span><span class="ruby-operator">::</span><span class="ruby-identifier">hexencode</span>(<span class="ruby-ivar">@hash</span>)
-                        <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;New  &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-constant">Digest</span><span class="ruby-operator">::</span><span class="ruby-identifier">hexencode</span>(<span class="ruby-identifier">newhash</span>)
                 <span class="ruby-keyword kw">end</span>
                 <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">true</span>
         <span class="ruby-keyword kw">end</span></pre>

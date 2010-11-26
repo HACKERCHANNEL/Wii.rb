@@ -10,13 +10,13 @@
   <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
 </head>
 <body class="standalone-code">
-  <pre><span class="ruby-comment cmt"># File header.rb, line 63</span>
+  <pre><span class="ruby-comment cmt"># File header.rb, line 70</span>
         <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">unpack</span>()
                 <span class="ruby-identifier">tag</span> = <span class="ruby-ivar">@data</span>.<span class="ruby-identifier">unpack</span>(<span class="ruby-value str">&quot;a64a4a60a4&quot;</span>)
                 <span class="ruby-keyword kw">unless</span> (<span class="ruby-identifier">tag</span>[<span class="ruby-value">1</span>] <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;IMET&quot;</span>) <span class="ruby-keyword kw">or</span> (<span class="ruby-identifier">tag</span>[<span class="ruby-value">3</span>] <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;IMET&quot;</span>)
                         <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">false</span>
                 <span class="ruby-keyword kw">end</span>
-                <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">tag</span>[<span class="ruby-value">3</span>] <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;IMET&quot;</span>
+                <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">tag</span>[<span class="ruby-value">3</span>] <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;IMET&quot;</span> <span class="ruby-comment cmt"># Channel modification thing.</span>
                         <span class="ruby-ivar">@data</span> = <span class="ruby-ivar">@data</span>[<span class="ruby-value">0x40</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>]
                 <span class="ruby-keyword kw">end</span>
                 <span class="ruby-ivar">@imet</span> = <span class="ruby-ivar">@data</span>.<span class="ruby-identifier">unpack</span>(<span class="ruby-value str">&quot;a64a4NN&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;N&quot;</span><span class="ruby-operator">*</span><span class="ruby-value">3</span> <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;N&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;a84&quot;</span><span class="ruby-operator">*</span><span class="ruby-value">10</span> <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;a588a16&quot;</span>)

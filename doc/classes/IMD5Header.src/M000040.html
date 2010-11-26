@@ -5,17 +5,18 @@
 
 <html>
 <head>
-  <title>new (IMETHeader)</title>
+  <title>new (IMD5Header)</title>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
   <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
 </head>
 <body class="standalone-code">
-  <pre><span class="ruby-comment cmt"># File header.rb, line 63</span>
+  <pre><span class="ruby-comment cmt"># File header.rb, line 12</span>
         <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">data</span>)
                 <span class="ruby-ivar">@data</span> = <span class="ruby-identifier">data</span>
                 <span class="ruby-ivar">@crypt</span> = <span class="ruby-constant">Crypto</span>.<span class="ruby-identifier">new</span>()
-                <span class="ruby-ivar">@sizes</span> = []
-                <span class="ruby-ivar">@names</span> = []
+                <span class="ruby-ivar">@tag</span> = <span class="ruby-value str">&quot;&quot;</span>
+                <span class="ruby-ivar">@size</span> = <span class="ruby-value">0</span>
+                <span class="ruby-ivar">@hash</span> = <span class="ruby-value str">&quot;&quot;</span>
         <span class="ruby-keyword kw">end</span></pre>
 </body>
 </html>

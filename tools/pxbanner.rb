@@ -49,11 +49,8 @@ imd5.dumpFile(ARGV[0] + "/meta/banner.bin")
 puts "Packed!"
 
 sizes.push(File.size(ARGV[0] + "/meta/icon.bin") - 0x20)
-puts sizes.last
 sizes.push(File.size(ARGV[0] + "/meta/banner.bin") - 0x20)
-puts sizes.last
 sizes.push(File.size(ARGV[0] + "/meta/sound.bin") - 0x20)
-puts sizes.last
 
 names = []
 for i in (0...10)

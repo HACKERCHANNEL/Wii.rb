@@ -5,14 +5,23 @@
 
 <html>
 <head>
-  <title>load (Compression)</title>
+  <title>compress (Compression)</title>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
   <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
 </head>
 <body class="standalone-code">
-  <pre><span class="ruby-comment cmt"># File compress.rb, line 12</span>
-        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">load</span>(<span class="ruby-identifier">data</span>)
-                <span class="ruby-ivar">@data</span> = <span class="ruby-identifier">data</span>
+  <pre><span class="ruby-comment cmt"># File compress.rb, line 41</span>
+        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">compress</span>(<span class="ruby-identifier">type</span>)
+                <span class="ruby-identifier">uncomp_len</span> = <span class="ruby-ivar">@data</span>.<span class="ruby-identifier">length</span>()
+                <span class="ruby-identifier">comp_type</span> = <span class="ruby-identifier">type</span>
+                <span class="ruby-identifier">hdr</span>  = <span class="ruby-identifier">uncomp_len</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value">8</span>
+                <span class="ruby-identifier">hdr</span> <span class="ruby-operator">|=</span> <span class="ruby-identifier">comp_type</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value">4</span>
+                
+                <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">comp_type</span> <span class="ruby-operator">==</span> <span class="ruby-constant">Compression</span><span class="ruby-operator">::</span><span class="ruby-constant">TYPE_LZ77</span>
+                        <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">lz77</span>(<span class="ruby-identifier">hdr</span>)
+                <span class="ruby-keyword kw">else</span>
+                        <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">&quot;Compression type not supported &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">comp_type</span>.<span class="ruby-identifier">to_s</span>
+                <span class="ruby-keyword kw">end</span>
         <span class="ruby-keyword kw">end</span></pre>
 </body>
 </html>

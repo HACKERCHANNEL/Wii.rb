@@ -5,17 +5,15 @@
 
 <html>
 <head>
-  <title>new (ContentMap)</title>
+  <title>new (Crypto)</title>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
   <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
 </head>
 <body class="standalone-code">
-  <pre><span class="ruby-comment cmt"># File contentmap.rb, line 16</span>
+  <pre><span class="ruby-comment cmt"># File common.rb, line 66</span>
         <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>()
-                <span class="ruby-ivar">@namemap</span> = {}
-                <span class="ruby-ivar">@hashmap</span> = {}
-                <span class="ruby-ivar">@array</span> = []
-                <span class="ruby-ivar">@count</span> = <span class="ruby-value">0</span>
+                <span class="ruby-ivar">@align</span> = <span class="ruby-value">64</span>
+                <span class="ruby-ivar">@crypter</span> = <span class="ruby-constant">OpenSSL</span><span class="ruby-operator">::</span><span class="ruby-constant">Cipher</span><span class="ruby-operator">::</span><span class="ruby-constant">Cipher</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value str">&quot;AES-256-CBC&quot;</span>)
         <span class="ruby-keyword kw">end</span></pre>
 </body>
 </html>

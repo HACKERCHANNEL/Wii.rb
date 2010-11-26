@@ -5,18 +5,21 @@
 
 <html>
 <head>
-  <title>compressed? (Compression)</title>
+  <title>lz77 (Compression)</title>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
   <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
 </head>
 <body class="standalone-code">
-  <pre><span class="ruby-comment cmt"># File compress.rb, line 20</span>
-        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">compressed?</span>()
-                <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@data</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">3</span>] <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;LZ77&quot;</span>
-                        <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">true</span>
-                <span class="ruby-keyword kw">else</span>
-                        <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">false</span>
-                <span class="ruby-keyword kw">end</span>
+  <pre><span class="ruby-comment cmt"># File compress.rb, line 95</span>
+        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">lz77</span>(<span class="ruby-identifier">newdata</span>)
+                <span class="ruby-identifier">newdata</span> = <span class="ruby-value str">&quot;&quot;</span>
+                <span class="ruby-identifier">newdata</span> <span class="ruby-operator">+=</span> <span class="ruby-value str">'L'</span> <span class="ruby-operator">+</span> <span class="ruby-value str">'Z'</span> <span class="ruby-operator">+</span> <span class="ruby-value str">'7'</span> <span class="ruby-operator">+</span> <span class="ruby-value str">'7'</span>
+                <span class="ruby-identifier">newdata</span> <span class="ruby-operator">+=</span> [ <span class="ruby-identifier">hdr</span> ].<span class="ruby-identifier">pack</span>(<span class="ruby-value str">&quot;V&quot;</span>)
+                
+                <span class="ruby-identifier">raise</span> <span class="ruby-constant">NotImplementedError</span>, <span class="ruby-value str">&quot;Compression is not supported currently&quot;</span>
+                
+                <span class="ruby-ivar">@data</span> = <span class="ruby-identifier">newdata</span>
+                <span class="ruby-keyword kw">return</span> <span class="ruby-ivar">@data</span>
         <span class="ruby-keyword kw">end</span></pre>
 </body>
 </html>

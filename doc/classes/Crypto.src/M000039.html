@@ -5,15 +5,19 @@
 
 <html>
 <head>
-  <title>encryptContent (Crypto)</title>
+  <title>validateMD5Hash (Crypto)</title>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
   <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
 </head>
 <body class="standalone-code">
-  <pre><span class="ruby-comment cmt"># File common.rb, line 105</span>
-        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">encryptContent</span>(<span class="ruby-identifier">titlekey</span>, <span class="ruby-identifier">idx</span>, <span class="ruby-identifier">data</span>)
-                <span class="ruby-identifier">iv</span> = [ <span class="ruby-identifier">idx</span> ].<span class="ruby-identifier">pack</span>(<span class="ruby-value str">&quot;n&quot;</span>) <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;\x00&quot;</span> <span class="ruby-operator">*</span> <span class="ruby-value">14</span>
-                <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">encryptData</span>(<span class="ruby-identifier">titlekey</span>, <span class="ruby-identifier">iv</span>, <span class="ruby-identifier">data</span>)
+  <pre><span class="ruby-comment cmt"># File common.rb, line 127</span>
+        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">validateMD5Hash</span>(<span class="ruby-identifier">data</span>, <span class="ruby-identifier">hash</span>)
+                <span class="ruby-identifier">newhash</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">createMD5Hash</span>(<span class="ruby-identifier">data</span>)
+                <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">newhash</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">hash</span>
+                        <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">true</span>
+                <span class="ruby-keyword kw">else</span>
+                        <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">false</span>
+                <span class="ruby-keyword kw">end</span>
         <span class="ruby-keyword kw">end</span></pre>
 </body>
 </html>

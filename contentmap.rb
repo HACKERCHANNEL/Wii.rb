@@ -7,11 +7,19 @@
 
 # A class to handle the /shared1/content.map file.
 class ContentMap < WiiObject
+	# A hash indexed by content name containing the map between name and hash.
+	attr_reader :namemap
+	# A hash indexed by content hash containing the map between name and hash.
+	attr_reader :hashmap
+	# The amount of contents in the map.
+	attr_reader :count
 	def initialize()
 		@namemap = {}
 		@hashmap = {}
 		@array = []
+		@count = 0
 	end
+	# Loads the content.map from data.
 	def load(data)
 		@count = data.length() / 28
 		for i in (0...@count)
@@ -22,23 +30,12 @@ class ContentMap < WiiObject
 			array[i*2 + 1] = entry[1]
 		end
 	end
-	def contentByHash(hash)
-		return @hashmap[hash]
-	end
-	def contentByName(name)
-		return @namemap[name]
-	end
-	def contentCount()
-		return @count
-	end
+	# Dumps out the content.map data.
 	def dump()
 		data = ""
 		for i in (0...@count)
 			data += [ array[i*2 + 0], array[i*2 + 1] ].pack("a8a20")
 		end
 		return data
-	end
-	def length()
-		return 8
 	end
 end

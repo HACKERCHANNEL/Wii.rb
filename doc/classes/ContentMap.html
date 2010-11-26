@@ -94,11 +94,7 @@ A class to handle the /shared1/content.map file.
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000029">contentByHash</a>&nbsp;&nbsp;
-      <a href="#M000030">contentByName</a>&nbsp;&nbsp;
-      <a href="#M000031">contentCount</a>&nbsp;&nbsp;
-      <a href="#M000032">dump</a>&nbsp;&nbsp;
-      <a href="#M000033">length</a>&nbsp;&nbsp;
+      <a href="#M000029">dump</a>&nbsp;&nbsp;
       <a href="#M000028">load</a>&nbsp;&nbsp;
       <a href="#M000027">new</a>&nbsp;&nbsp;
       </div>
@@ -115,6 +111,38 @@ A class to handle the /shared1/content.map file.
 
 
 
+    <div id="attribute-list">
+      <h3 class="section-bar">Attributes</h3>
+
+      <div class="name-list">
+        <table>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">count</td>
+          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
+          <td class="context-item-desc">
+The amount of contents in the map.
+
+</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">hashmap</td>
+          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
+          <td class="context-item-desc">
+A hash indexed by content hash containing the map between name and hash.
+
+</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">namemap</td>
+          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
+          <td class="context-item-desc">
+A hash indexed by content name containing the map between name and hash.
+
+</td>
+        </tr>
+        </table>
+      </div>
+    </div>
       
 
 
@@ -144,67 +172,14 @@ A class to handle the /shared1/content.map file.
         <div class="method-heading">
           <a href="ContentMap.src/M000029.html" target="Code" class="method-signature"
             onclick="popupCode('ContentMap.src/M000029.html');return false;">
-          <span class="method-name">contentByHash</span><span class="method-args">(hash)</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-        </div>
-      </div>
-
-      <div id="method-M000030" class="method-detail">
-        <a name="M000030"></a>
-
-        <div class="method-heading">
-          <a href="ContentMap.src/M000030.html" target="Code" class="method-signature"
-            onclick="popupCode('ContentMap.src/M000030.html');return false;">
-          <span class="method-name">contentByName</span><span class="method-args">(name)</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-        </div>
-      </div>
-
-      <div id="method-M000031" class="method-detail">
-        <a name="M000031"></a>
-
-        <div class="method-heading">
-          <a href="ContentMap.src/M000031.html" target="Code" class="method-signature"
-            onclick="popupCode('ContentMap.src/M000031.html');return false;">
-          <span class="method-name">contentCount</span><span class="method-args">()</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-        </div>
-      </div>
-
-      <div id="method-M000032" class="method-detail">
-        <a name="M000032"></a>
-
-        <div class="method-heading">
-          <a href="ContentMap.src/M000032.html" target="Code" class="method-signature"
-            onclick="popupCode('ContentMap.src/M000032.html');return false;">
           <span class="method-name">dump</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
-        </div>
-      </div>
-
-      <div id="method-M000033" class="method-detail">
-        <a name="M000033"></a>
-
-        <div class="method-heading">
-          <a href="ContentMap.src/M000033.html" target="Code" class="method-signature"
-            onclick="popupCode('ContentMap.src/M000033.html');return false;">
-          <span class="method-name">length</span><span class="method-args">()</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
+          <p>
+Dumps out the content.map data.
+</p>
         </div>
       </div>
 
@@ -219,6 +194,9 @@ A class to handle the /shared1/content.map file.
         </div>
       
         <div class="method-description">
+          <p>
+Loads the content.map from data.
+</p>
         </div>
       </div>
 

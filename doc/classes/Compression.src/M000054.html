@@ -5,15 +5,14 @@
 
 <html>
 <head>
-  <title>validateSHAHash (Crypto)</title>
+  <title>compressed? (Compression)</title>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
   <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
 </head>
 <body class="standalone-code">
-  <pre><span class="ruby-comment cmt"># File common.rb, line 118</span>
-        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">validateSHAHash</span>(<span class="ruby-identifier">data</span>, <span class="ruby-identifier">hash</span>)
-                <span class="ruby-identifier">newhash</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">createSHAHash</span>(<span class="ruby-identifier">data</span>)
-                <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">newhash</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">hash</span>
+  <pre><span class="ruby-comment cmt"># File compress.rb, line 20</span>
+        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">compressed?</span>()
+                <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@data</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">3</span>] <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;LZ77&quot;</span>
                         <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">true</span>
                 <span class="ruby-keyword kw">else</span>
                         <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">false</span>
